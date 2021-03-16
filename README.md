@@ -1,1 +1,1 @@
-"# Docker Image for YAMNet audio analysis" 
+# Docker Image for YAMNet audio analysis
