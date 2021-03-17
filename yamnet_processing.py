@@ -87,7 +87,6 @@ def filter_merge_events(jsonfile, file):
         
     # First categorize and filter
     for audio_data in data['audio_events']:
-        print(audio_data['begin'], audio_data['end'], audio_data['events'], audio_data['scores'])
         caption_texts = dict()
         for e in EVENT_THRESHOLDS:
             caption_texts[e] = ""
