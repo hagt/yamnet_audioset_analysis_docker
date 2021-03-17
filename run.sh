@@ -8,11 +8,8 @@ if [[ $# -ne 1 ]] ; then
 fi
 
 inputfull=`realpath $1`
-echo $inputfull
 ipath=$(dirname -- "$inputfull")
-echo $ipath
 filename=$(basename -- "$inputfull")
-echo $filename
 
 docker run --rm -it --name yamnet -v $ipath:/data hagt/yamnet:1.0 "/data/$filename"
 
