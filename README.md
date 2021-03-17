@@ -4,7 +4,7 @@ This repository contains the sources for creating a ready-to-use Docker image fo
 
 The image can be used to automatically analyze a video or audio file according to the 521 audio event classes from the [AudioSet ontology] (https://research.google.com/audioset/ontology/index.html). If the input file is video, the audio track is extracted first.
 
-Since the original source code did not provide serializations or post-processing of the analysis data, I developed a JSON output of the analysis that includes the five most important audio events for each overlapping time slice of the audio file (currently 960 ms) and a merge strategy that combines the same consecutive events and outputs CSV data divided into music, speech, silence and other events.
+Since the original source code did not provide serializations or post-processing of the analysis data, I developed a JSON output of the analysis that includes the five most important audio events and respective scores for each overlapping time slice of the audio file (currently 960 ms) and a merge strategy that combines the same consecutive events and outputs CSV data divided into music, speech, silence and other events.
 
 The image uses the following resources:
 * [YAMNet source code](https://github.com/tensorflow/models/tree/master/research/audioset/yamnet) of the TensorFlow Model Garden
