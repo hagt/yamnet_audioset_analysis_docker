@@ -31,8 +31,64 @@ To perform an analysis, I provide a **run.sh** script that accepts a video or au
 
 If you want to run the image manually, use the following command:
 ```
-docker run --rm -it --name yamnet -v /path/to/you/video/audio/file:/data hagt/yamnet:1.0 /data/my_video.mp4
+docker run --rm -it --name yamnet -v /path/to/video/audio/file:/data hagt/yamnet:1.0 /data/my_video.mp4
 ```
 
 ### Output data
+
+The yamnet processing script outputs a JSON serialization of the original classification. It contains a *file_info* part and a list of *audio_events*. Each audio event is a 960ms segment of the waveform (the step size is 480ms, so they overlap) and lists the top 5 highest-scoring *events* and their corresponding *scores*.
+
+```json
+{
+    "file_info": {
+        "path": "/data/TV-20210315-2033-2200.webs.h264.mp4",
+        "patch_window_ms": 960.0,
+        "patch_hop_ms": 480.0
+    },
+    "audio_events": [{
+            "begin": 0,
+            "end": 960,
+            "events": ["Silence", "Music", "Musical instrument", "Speech", "Inside, small room"],
+            "scores": [0.9924958348274231, 0.00016120076179504395, 2.1329778974177316e-05, 2.0468718503252603e-05, 1.929334939632099e-05]
+        }, {
+            "begin": 480,
+            "end": 1440,
+            "events": ["Silence", "Music", "Inside, small room", "Musical instrument", "Keyboard (musical)"],
+            "scores": [0.19930168986320496, 0.1958259642124176, 0.004749268293380737, 0.0017569959163665771, 0.0016628503799438477]
+        }, {
+            "begin": 960,
+            "end": 1920,
+            "events": ["Music", "Musical instrument", "Ukulele", "Pizzicato", "Plucked string instrument"],
+            "scores": [0.8656256198883057, 0.07309243083000183, 0.06837290525436401, 0.02548578381538391, 0.020604193210601807]
+        }, {
+        ...
+```
+
+The data is then processed to categorize audio events into "music", "speech", "silence" and any "other" events and to merge consecutive events. The results are saved as tab-separated CSV files in the format "Begin (ms)" *TAB* "End (ms)" *TAB* "Event". 
+
+```
+example_music.csv
+480	18240	Music
+94560	95520	Music
+208320	210240	Music
+...
+
+example_speech.csv
+6240	7680	Speech
+14880	940320	Speech
+941760	958080	Speech
+...
+
+example_silence.csv
+0	960	Silence
+624480	625440	Silence
+894240	895200	Silence
+...
+
+example_other.csv
+9360	9840	Background music; Theme music
+9840	10560	Theme music
+65280	66240	Narration, monologue
+...
+```
 
